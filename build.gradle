@@ -1,0 +1,62 @@
+defaultTasks 'clean', 'test', 'aggregate'
+
+version '1.0-SNAPSHOT'
+
+buildscript {
+    repositories {
+        maven {
+            url 'https://plugins.gradle.org/m2/'
+        }
+    }
+    dependencies {
+        classpath 'net.serenity-bdd:serenity-gradle-plugin:3.1.1'
+    }
+}
+
+apply plugin: 'java'
+apply plugin: 'eclipse'
+apply plugin: 'idea'
+apply plugin: 'net.serenity-bdd.serenity-gradle-plugin'
+
+repositories {
+    mavenCentral()
+}
+
+ext {
+    slf4jVersion = '1.7.7'
+    serenityCoreVersion = '3.1.1'
+    serenityCucumberVersion = '3.1.1'
+    junitVersion = '4.13.2'
+    assertJVersion = '3.21.0'
+    jupiterJunitVersion = '5.8.1'
+
+    cucumberVersion = '6.11.0'
+    assertJVersion = '3.21.0'
+}
+
+dependencies {
+
+    implementation "net.serenity-bdd:serenity-core:${serenityCoreVersion}",
+            "net.serenity-bdd:serenity-cucumber:${serenityCucumberVersion}",
+            "net.serenity-bdd:serenity-screenplay:${serenityCoreVersion}",
+            "net.serenity-bdd:serenity-screenplay-webdriver:${serenityCoreVersion}",
+            "net.serenity-bdd:serenity-ensure:${serenityCoreVersion}",
+            "junit:junit:${junitVersion}",
+            "org.junit.platform:junit-platform-launcher:1.8.1",
+            "org.junit.jupiter:junit-jupiter-engine:${jupiterJunitVersion}",
+            "org.junit.vintage:junit-vintage-engine:${jupiterJunitVersion}",
+            "org.assertj:assertj-core:${assertJVersion}",
+            "io.cucumber:cucumber-core:${cucumberVersion}",
+            "io.cucumber:cucumber-java:${cucumberVersion}"
+
+
+}
+
+test {
+    testLogging.showStandardStreams = true
+    systemProperties System.getProperties()
+}
+
+gradle.startParameter.continueOnFailure = true
+
+test.finalizedBy(aggregate)
